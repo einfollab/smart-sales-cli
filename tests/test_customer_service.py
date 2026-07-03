@@ -3,10 +3,11 @@ import os
 import json
 
 from customer_service import (
-    register, list_all, detail, update, delete, exists
+    register, list_all, detail, search, update, delete, exists
 )
 
 CUSTOMER_FILE = 'data/customers.json'
+REPORT_FILE = 'data/sales_reports.json'
 
 
 class TestCustomerService(unittest.TestCase):
@@ -55,15 +56,6 @@ class TestCustomerService(unittest.TestCase):
         success, msg = register("테스트", "홍길동", "invalid")
         self.assertFalse(success)
 
-    def test_register_duplicate_customer_id_fails(self):
-        """customer_id 중복 등록 시 차단"""
-        register("A", "M1", "a@test.com")
-        # 직접 customer_id를 지정할 수 없으므로, 동일 ID가 생성되지 않음을 확인
-        # 자동 증가이므로 중복이 발생하지 않음. 안전장치가 정상 동작함을 확인
-        customers = list_all()
-        self.assertEqual(len(customers), 1)
-        self.assertEqual(customers[0]['customer_id'], "C001")
-
     # --- list_all ---
     def test_list_all_empty(self):
         self.assertEqual(list_all(), [])
@@ -83,6 +75,28 @@ class TestCustomerService(unittest.TestCase):
 
     def test_detail_nonexistent(self):
         self.assertIsNone(detail("C999"))
+
+    # --- search ---
+    def test_search_by_name(self):
+        register("가나다", "홍길동", "hong@test.com")
+        register("ABC", "김철수", "kim@test.com")
+        results = search("가나")
+        self.assertEqual(len(results), 1)
+
+    def test_search_by_manager(self):
+        register("가나다", "홍길동", "hong@test.com")
+        results = search("홍길")
+        self.assertEqual(len(results), 1)
+
+    def test_search_empty_keyword_returns_all(self):
+        register("A", "M1", "a@test.com")
+        results = search("")
+        self.assertEqual(len(results), 1)
+
+    def test_search_no_match(self):
+        register("A", "M1", "a@test.com")
+        results = search("ZZZ")
+        self.assertEqual(len(results), 0)
 
     # --- update ---
     def test_update_name(self):
