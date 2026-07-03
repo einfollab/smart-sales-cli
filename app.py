@@ -123,13 +123,13 @@ def run():
             cid = input("고객 ID: ").strip().upper()
             date = input("활동 날짜 (YYYY-MM-DD): ").strip()
             content = input("영업 활동 내용: ").strip()
-            from report_service import register
+            from sales_report_service import register
             success, msg = register(cid, date, content)
             print(f"→ {msg}")
 
         elif choice == '8':
             print_header("영업일지 목록")
-            from report_service import list_all
+            from sales_report_service import list_all
             reports = list_all()
             if not reports:
                 print("등록된 영업일지가 없습니다.")
@@ -143,7 +143,7 @@ def run():
         elif choice == '9':
             print_header("영업일지 수정")
             rid = input("영업일지 ID: ").strip().upper()
-            from report_service import get_by_id, update
+            from sales_report_service import get_by_id, update
             r = get_by_id(rid)
             if r is None:
                 print("→ 존재하지 않는 영업일지입니다.")
