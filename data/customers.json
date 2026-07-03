@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "customer_id": "C001",
+    "customer_name": "세메스",
+    "manager_name": "홍길동",
+    "email": "aaa@aaa.com"
+  }
+]
