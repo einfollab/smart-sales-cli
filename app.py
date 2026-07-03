@@ -11,19 +11,18 @@ def print_menu():
     print("1. 고객사 등록")
     print("2. 고객사 목록")
     print("3. 고객사 상세 조회")
-    print("4. 고객사 검색")
-    print("5. 고객사 수정")
-    print("6. 고객사 삭제")
-    print("7. 영업일지 등록")
-    print("8. 영업일지 목록")
-    print("9. 영업일지 수정")
-    print("10. 영업일지 삭제")
-    print("11. 영업일지 상신")
-    print("12. 영업일지 승인")
-    print("13. 영업일지 반려")
-    print("14. 영업일지 회수")
-    print("15. 고객사별 활동 요약")
-    print("16. 고객사 목록 CSV 내보내기")
+    print("4. 고객사 수정")
+    print("5. 고객사 삭제")
+    print("6. 영업일지 등록")
+    print("7. 영업일지 목록")
+    print("8. 영업일지 수정")
+    print("9. 영업일지 삭제")
+    print("10. 영업일지 상신")
+    print("11. 영업일지 승인")
+    print("12. 영업일지 반려")
+    print("13. 영업일지 회수")
+    print("14. 고객사별 활동 요약")
+    print("15. 고객사 목록 CSV 내보내기")
     print("0. 종료")
     return input("\n메뉴를 선택하세요: ").strip()
 
@@ -71,19 +70,6 @@ def run():
                 print("→ 존재하지 않는 고객사입니다.")
 
         elif choice == '4':
-            print_header("고객사 검색")
-            keyword = input("검색어 (고객사명/담당자명): ").strip()
-            from customer_service import search
-            results = search(keyword)
-            if not results:
-                print("검색 결과가 없습니다.")
-            else:
-                print(f"{'ID':<8} {'고객사명':<20} {'담당자':<12} {'이메일':<25}")
-                print("-" * 65)
-                for c in results:
-                    print(f"{c['customer_id']:<8} {c['customer_name']:<20} {c['manager_name']:<12} {c['email']:<25}")
-
-        elif choice == '5':
             print_header("고객사 수정")
             cid = input("고객 ID: ").strip().upper()
             from customer_service import detail, update
@@ -111,14 +97,14 @@ def run():
             success, msg = update(cid, **kwargs)
             print(f"→ {msg}")
 
-        elif choice == '6':
+        elif choice == '5':
             print_header("고객사 삭제")
             cid = input("고객 ID: ").strip().upper()
             from customer_service import delete
             success, msg = delete(cid)
             print(f"→ {msg}")
 
-        elif choice == '7':
+        elif choice == '6':
             print_header("영업일지 등록")
             cid = input("고객 ID: ").strip().upper()
             date = input("활동 날짜 (YYYY-MM-DD): ").strip()
@@ -127,7 +113,7 @@ def run():
             success, msg = register(cid, date, content)
             print(f"→ {msg}")
 
-        elif choice == '8':
+        elif choice == '7':
             print_header("영업일지 목록")
             from report_service import list_all
             reports = list_all()
@@ -140,7 +126,7 @@ def run():
                     content_preview = r['content'][:27] + '...' if len(r['content']) > 30 else r['content']
                     print(f"{r['report_id']:<8} {r['customer_id']:<8} {r.get('customer_name', '?'):<20} {r['activity_date']:<12} {r['status']:<12} {content_preview:<30}")
 
-        elif choice == '9':
+        elif choice == '8':
             print_header("영업일지 수정")
             rid = input("영업일지 ID: ").strip().upper()
             from report_service import get_by_id, update
@@ -164,42 +150,42 @@ def run():
             success, msg = update(rid, **kwargs)
             print(f"→ {msg}")
 
-        elif choice == '10':
+        elif choice == '9':
             print_header("영업일지 삭제")
             rid = input("영업일지 ID: ").strip().upper()
             from report_service import delete
             success, msg = delete(rid)
             print(f"→ {msg}")
 
-        elif choice == '11':
+        elif choice == '10':
             print_header("영업일지 상신")
             rid = input("영업일지 ID: ").strip().upper()
             from workflow_service import submit
             success, msg = submit(rid)
             print(f"→ {msg}")
 
-        elif choice == '12':
+        elif choice == '11':
             print_header("영업일지 승인")
             rid = input("영업일지 ID: ").strip().upper()
             from workflow_service import approve
             success, msg = approve(rid)
             print(f"→ {msg}")
 
-        elif choice == '13':
+        elif choice == '12':
             print_header("영업일지 반려")
             rid = input("영업일지 ID: ").strip().upper()
             from workflow_service import reject
             success, msg = reject(rid)
             print(f"→ {msg}")
 
-        elif choice == '14':
+        elif choice == '13':
             print_header("영업일지 회수")
             rid = input("영업일지 ID: ").strip().upper()
             from workflow_service import withdraw
             success, msg = withdraw(rid)
             print(f"→ {msg}")
 
-        elif choice == '15':
+        elif choice == '14':
             print_header("고객사별 활동 요약")
             cid = input("고객 ID: ").strip().upper()
             from summary_service import summarize_by_customer
@@ -217,7 +203,7 @@ def run():
                         content_preview = r['content'][:27] + '...' if len(r['content']) > 30 else r['content']
                         print(f"{r['report_id']:<8} {r['activity_date']:<12} {r['status']:<12} {content_preview}")
 
-        elif choice == '16':
+        elif choice == '15':
             print_header("고객사 목록 CSV 내보내기")
             from csv_exporter import export_to_csv
             export_to_csv()
