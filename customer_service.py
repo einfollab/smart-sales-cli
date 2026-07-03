@@ -68,6 +68,22 @@ def detail(customer_id):
     return None
 
 
+def search(keyword):
+    """고객사명, 담당자명, 이메일에 검색어가 포함되면 조회.
+    대소문자 구분 없음. 빈 문자열/공백만 → 빈 목록 반환."""
+    if not keyword or not keyword.strip():
+        return []
+    kw = keyword.strip().lower()
+    customers = load_data(CUSTOMER_FILE)
+    results = []
+    for c in customers:
+        if (kw in c['customer_name'].lower() or
+            kw in c['manager_name'].lower() or
+            kw in c['email'].lower()):
+            results.append(c)
+    return results
+
+
 def update(customer_id, customer_name=None, manager_name=None, email=None):
     """고객사 정보 수정. customer_id는 변경 불가.
     None이 아닌 값만 업데이트."""

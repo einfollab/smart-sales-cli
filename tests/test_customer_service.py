@@ -3,7 +3,7 @@ import os
 import json
 
 from customer_service import (
-    register, list_all, detail, update, delete, exists
+    register, list_all, detail, search, update, delete, exists
 )
 
 CUSTOMER_FILE = 'data/customers.json'
@@ -73,6 +73,48 @@ class TestCustomerService(unittest.TestCase):
         register("B", "M2", "b@test.com")
         customers = list_all()
         self.assertEqual(len(customers), 2)
+
+    # --- search ---
+    def test_search_by_name(self):
+        register("가나다", "홍길동", "hong@test.com")
+        register("ABC", "김철수", "kim@test.com")
+        results = search("가나")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['customer_name'], "가나다")
+
+    def test_search_by_manager(self):
+        register("가나다", "홍길동", "hong@test.com")
+        results = search("홍길")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['manager_name'], "홍길동")
+
+    def test_search_by_email(self):
+        register("가나다", "홍길동", "hong@test.com")
+        results = search("hong")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['email'], "hong@test.com")
+
+    def test_search_empty_keyword_returns_empty(self):
+        register("A", "M1", "a@test.com")
+        results = search("")
+        self.assertEqual(len(results), 0)
+
+    def test_search_whitespace_keyword_returns_empty(self):
+        register("A", "M1", "a@test.com")
+        results = search("   ")
+        self.assertEqual(len(results), 0)
+
+    def test_search_no_match(self):
+        register("A", "M1", "a@test.com")
+        results = search("ZZZ")
+        self.assertEqual(len(results), 0)
+
+    def test_search_case_insensitive(self):
+        register("ABC", "M1", "a@test.com")
+        results = search("abc")
+        self.assertEqual(len(results), 1)
+        results = search("ABC")
+        self.assertEqual(len(results), 1)
 
     # --- detail ---
     def test_detail_existing(self):
