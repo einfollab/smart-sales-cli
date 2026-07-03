@@ -174,28 +174,28 @@ def run():
         elif choice == '11':
             print_header("영업일지 상신")
             rid = input("영업일지 ID: ").strip().upper()
-            from workflow_service import submit
+            from approval_service import submit
             success, msg = submit(rid)
             print(f"→ {msg}")
 
         elif choice == '12':
             print_header("영업일지 승인")
             rid = input("영업일지 ID: ").strip().upper()
-            from workflow_service import approve
+            from approval_service import approve
             success, msg = approve(rid)
             print(f"→ {msg}")
 
         elif choice == '13':
             print_header("영업일지 반려")
             rid = input("영업일지 ID: ").strip().upper()
-            from workflow_service import reject
+            from approval_service import reject
             success, msg = reject(rid)
             print(f"→ {msg}")
 
         elif choice == '14':
             print_header("영업일지 회수")
             rid = input("영업일지 ID: ").strip().upper()
-            from workflow_service import withdraw
+            from approval_service import withdraw
             success, msg = withdraw(rid)
             print(f"→ {msg}")
 
